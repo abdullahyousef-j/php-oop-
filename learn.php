@@ -1,39 +1,42 @@
 <?php
 
-class Employee {
-    public $name;
-    public $salary;
+class BankAccount {
+    protected $balance;
 
-    public function __construct($name, $salary) {
-        $this->name = $name;
-        $this->salary = $salary;
+    public function __construct($balance) {
+        $this->balance = $balance;
     }
 
-    public function getData() {
-        return "Name: {$this->name}, Base Salary: {$this->salary}";
-    }
-}
-
-class Manager extends Employee {
-    public $bonus;
-
-    public function __construct($name, $salary, $bonus) {
-        // استدعاء دالة البناء من الكلاس الأب
-        parent::__construct($name, $salary);
-        $this->bonus = $bonus;
+    public function deposit($amount) {
+        $this->balance += $amount; 
     }
 
-    public function getTotalSalary() {
-        // حساب إجمالي الراتب بالوصول لخصائص الأب
-        return $this->salary + $this->bonus;
+    public function getBalance() {
+        return $this->balance; 
     }
 }
 
-// إنشاء الكائن
-$manager = new Manager("Ahmed", 1000, 200);
+class SavingAccount extends BankAccount {
+    public $interestRate;
 
-// طباعة التفاصيل وإجمالي الراتب
-echo $manager->getData() . "\n";
-echo "Total Salary: " . $manager->getTotalSalary();
+    public function __construct($balance, $interestRate) {
+        parent::__construct($balance);
+        $this->interestRate = $interestRate;
+    }
+
+    public function addInterest() {
+        $interest = $this->balance * $this->interestRate;
+        $this->balance += $interest;
+    }
+
+    public function display() {
+        echo "Your balance: {$this->getBalance()} and Interest Rate: {$this->interestRate}\n";
+    }
+}
+
+// التجربة
+$bank = new SavingAccount(1000, 0.05); 
+$bank->addInterest();                 
+echo "الرصيد النهائي: " . $bank->getBalance(); 
 
 ?>
